@@ -94,6 +94,11 @@
 			path = ADGUITests;
 			sourceTree = "<group>";
 		};
+		A5B4B9712FE4DB3900DF10E0 /* .github */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = .github;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +135,7 @@
 		A54103732FD452F7003BB973 = {
 			isa = PBXGroup;
 			children = (
+				A5B4B9712FE4DB3900DF10E0 /* .github */,
 				A541037E2FD452F7003BB973 /* ADG */,
 				A541038C2FD452F9003BB973 /* ADGTests */,
 				A54103962FD452F9003BB973 /* ADGUITests */,
@@ -288,6 +294,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				A541037E2FD452F7003BB973 /* ADG */,
+				A5B4B9712FE4DB3900DF10E0 /* .github */,
 			);
 			name = ADG;
 			packageProductDependencies = (

@@ -1,0 +1,33 @@
+name: iOS Build Check
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Build App
+        run: |
+          xcodebuild \
+          -scheme YOUR_SCHEME_NAME \
+          -destination 'platform=iOS Simulator,name=iPhone 16' \
+          build
+
