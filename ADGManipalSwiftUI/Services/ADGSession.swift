@@ -11,6 +11,7 @@ final class ADGSession {
     var userEmail: String?
     var adminEmail: String?
     var authError: String?
+    var isPasswordRecoveryActive = false
 
     private let client: SupabaseClient
 
@@ -41,6 +42,20 @@ final class ADGSession {
         }
     }
 
+    func sendPasswordReset(email: String) async {
+        authError = nil
+        do {
+            // Supabase SDK: request password reset email with custom redirect URL
+            try await client.auth.resetPasswordForEmail(
+                email,
+                redirectTo: URL(string: "adgapp://reset-password")
+            )
+            authError = "Password reset email sent. Check your inbox."
+        } catch {
+            authError = error.localizedDescription
+        }
+    }
+
     func signUp(email: String, password: String, fullName: String) async {
         authError = nil
         do {
@@ -62,6 +77,14 @@ final class ADGSession {
             authError = error.localizedDescription
         }
         clearUser()
+    }
+
+    func beginPasswordRecovery() {
+        isPasswordRecoveryActive = true
+    }
+
+    func endPasswordRecovery() {
+        isPasswordRecoveryActive = false
     }
 
     private func apply(user: User) {

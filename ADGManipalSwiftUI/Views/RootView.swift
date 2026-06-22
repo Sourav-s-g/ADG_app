@@ -47,6 +47,11 @@ struct RootView: View {
                 .presentationDetents([.height(430)])
                 .presentationDragIndicator(.visible)
         }
+        .onChange(of: session.isPasswordRecoveryActive) { isRecoveryActive in
+            if isRecoveryActive {
+                showsAdminLogin = false
+            }
+        }
     }
 }
 

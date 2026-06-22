@@ -8,6 +8,7 @@ struct AdminLoginSheet: View {
     @State private var fullName = ""
     @State private var email = ""
     @State private var password = ""
+    @State private var showPassword = false
     @State private var isSigningIn = false
 
     var body: some View {
@@ -87,10 +88,26 @@ struct AdminLoginSheet: View {
                     .padding(14)
                     .background(ADGTheme.surface)
 
-                SecureField("Password", text: $password)
-                    .textFieldStyle(.plain)
-                    .padding(14)
-                    .background(ADGTheme.surface)
+                HStack(spacing: 12) {
+                    if showPassword {
+                        TextField("Password", text: $password)
+                            .textFieldStyle(.plain)
+                    } else {
+                        SecureField("Password", text: $password)
+                            .textFieldStyle(.plain)
+                    }
+                    
+                    Button {
+                        showPassword.toggle()
+                    } label: {
+                        Image(systemName: showPassword ? "eye.fill" : "eye.slash.fill")
+                            .foregroundStyle(ADGTheme.ink)
+                    }
+                    .padding(.trailing, 8)
+                }
+                .padding(.leading, 14)
+                .padding(.vertical, 14)
+                .background(ADGTheme.surface)
             }
 
             if let authError = session.authError {
@@ -125,6 +142,21 @@ struct AdminLoginSheet: View {
             }
             .disabled(!isValid || isSigningIn)
             .accessibilityHint(mode == .signIn ? "Signs in with your account." : "Creates a student account.")
+
+            if mode == .signIn {
+                Button {
+                    Task {
+                        isSigningIn = true
+                        await session.sendPasswordReset(email: email)
+                        isSigningIn = false
+                    }
+                } label: {
+                    Text("Forgot Password?")
+                        .font(.caption)
+                        .foregroundStyle(ADGTheme.ink)
+                }
+                .padding(.top, 6)
+            }
         }
         .onChange(of: session.authError) { _, error in
             if let error {
@@ -132,6 +164,8 @@ struct AdminLoginSheet: View {
             }
         }
     }
+
+    
 
     private var isValid: Bool {
         if mode == .signUp && fullName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
